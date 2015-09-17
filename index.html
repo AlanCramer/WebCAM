@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Web CAM</title>
+
+    <!-- Bootstrap 
+    <link href="vendor/bootstrap/bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet">-->
+    <script src="toolpathing/tlpt.min.js"></script>
+    <script src="vendor/jquery/jquery-2.1.0.min.js"></script>
+    <script src="actp.js"></script>
+    
+    <link href="css/style1.css" rel="stylesheet">
+  
+  </head>
+
+  <body>
+    
+    <div>
+        <input type="file" id="openimage" name="imagefile" accept="image/*" style="display:none"/>
+        <h1 id="topstring">Load an image file ...</h1>
+        
+        <div id="toolbar" >
+            <button id="btn0" class="btn btn-primary" onclick="ACTP.OnLoadImage()">Load File</button>
+            <button id="btn1" class="btn btn-primary" onclick="ACTP.onCalcPath()">Show Toolpaths</button> 
+        </div>
+
+        <div id="param-input-container">
+        <div id="axisScaleInputs" >
+          <h4> Canvas to Reality Scale</h4>
+          <div class="row">
+            <label for="xAxisScale" class="col-md-2 input-label">X Axis</label>
+            <div class="col-md-1">
+              <input type="number" class="input-real" id="xAxisScale" placeholder="20">
+            </div>
+          </div>
+          <div class="row">
+            <label for="yAxisScale" class="col-md-2 input-label">Y Axis</label>
+            <div class="col-md-1">
+              <input type="number" class="input-real" id="yAxisScale" placeholder="16">
+            </div>
+          </div>
+          <div class="row">
+            <label for="zAxisScale" class="col-md-2 input-label">Z Axis</label>
+            <div class="col-md-1">
+              <input type="number" class="input-real" id="zAxisScale" placeholder="3">
+            </div>
+          </div>
+        </div>
+        
+        <div id="toolbitInfo" >
+          <h4> Toolbit Information </h4>
+          <div class="row">
+            <label for="bitdiam" class="col-md-2 input-label">Bit Diameter (in)</label>
+            <div class="col-md-1">
+              <input type="number" class="input-real" id="bitdiam" placeholder=".25">
+            </div>
+          </div>
+        </div> <!-- toolbitInfo -->        
+    </div> <!-- nav -->
+    </div><!-- header area, buttons and inputs -->
+    
+    <div style="position: relative;" width="810" height="410">
+        <canvas id="image-canvas" width="600" height="600" ></canvas>    
+ <!--       <canvas id="pathcanvas" width="800" height="400" 
+            style="position: absolute; z-index: 2;border:1px solid blue"></canvas> -->
+    </div>
+
+
+
+
+    </body>
+</html>

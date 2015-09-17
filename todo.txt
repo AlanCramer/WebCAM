@@ -1,0 +1,34 @@
+
+Questions:
+Bitmap vs SVG
+Setting scale on image - how to minimize pixelization?
+   Convert to SVG first?
+   Compute toolpaths first and scale those? That is, keep the image in a base pixel unit and scale as needed?
+Related, 
+   Is resolution the user's problem? (well, ultimately 'yes')
+   How to let the user control that?
+
+Load B/W Image 
+Set Scale X,Y and Z
+Will this affect pixelization?
+Generate Tool Paths
+   Toolbit
+   Step over
+   Lead In?
+
+
+Programmaticly generate an image 
+
+
+Create Blog Post about Image to Toolpaths
+
+
+Create Post about Toolpaths to Object
+
+
+Create Post about program to image
+
+
+3D view
+
+
