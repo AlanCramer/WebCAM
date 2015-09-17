@@ -75,8 +75,15 @@ button{
 }
 
 #image-canvas{
+    position:absolute;
     z-index: 1; 
     border:1px solid red; 
+    margin-left:10px;
+}
+#path-canvas{
+    position:absolute;
+    z-index: 2; 
+    border:1px solid blue; 
     margin-left:10px;
 }
 
