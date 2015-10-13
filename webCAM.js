@@ -33,14 +33,35 @@
         
         var canvas = document.getElementById('path-canvas');
         var ctx = canvas.getContext('2d');
-        ctx.fillStyle= "black";
-        ctx.fillRect(5,5,120, 15);
-        ctx.fillStyle= "white";
-        ctx.fillText("I am the path canvas", 10, 15);
+        
+        ctx.fillStyle = "#0000FF";
+        ctx.strokeStyle = "#0000FF";
+        ctx.lineWidth = 3;
+        //this.toolpaths.drawSimpleSegments(canvas);
+        this.toolpaths.draw(canvas);
     };
     
     webCAM.CalcToolpaths = function() {
         
+        
+        // get user values
+        var tbd = parseFloat($("#bitdiam").val());
+        
+        if (tbd) {
+            
+            var pxPerIn = 60;
+            tbd *= pxPerIn;
+        }
+        
+        var toolCtx = { 
+         
+            toolbitDiamInPx: tbd || 12,
+        };
+        
+        var imgCanvas = document.getElementById('image-canvas');
+        
+        var path = ACTP.ToolpathsFromCanvas(toolCtx, imgCanvas);
+        this.toolpaths = path;
     };
     
     webCAM.clearPathCanvas = function() {
@@ -71,11 +92,11 @@
         fileReadAsDataUrl.readAsDataURL(file); 
     };
     
-})(this.webCAM = {});
+})(this.WebCAM = {});
 
 $(document).ready(function() {
     
-    document.getElementById('openimage').addEventListener('change', webCAM.handleFileSelect, false);
+    document.getElementById('openimage').addEventListener('change', WebCAM.handleFileSelect, false);
 });
 
 

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="vendor/d3.min.js"></script>
+
+<script>
+    var myApp = {};
+</script>
+
+<script src="d3widgets/fingerJoint.js"></script>
+<script src="makeBoard.js"></script>
+<script src="makeBoardData.js"></script>
+<script src="bfjInfoArea.js"></script>
+<script src="exportSvg.js"></script>
+
+<head>
+</head>
+
+<body>
+<style>
+
+#infoArea {
+
+    margin:     5px;
+    background: #eee;
+    padding:    5px;
+}
+
+#inputArea {
+
+    margin-top: 15px;
+    width: 20%;
+    display: table;
+}
+
+#inputArea .inputRow{
+
+    display: table-row;
+}
+
+#inputArea input {
+    
+    width: 50px;
+    float: right;
+    display: table-cell;
+    padding: 3px;
+}
+
+.inputLabel {
+
+    float: left;
+    margin-right: 5px;
+    display: table-cell;
+    padding: 3px;
+}
+
+svg {
+
+    margin: 5px;
+}
+
+</style>
+
+
+
+<a id="link" href="#">Right Click and "Save Link as" to save SVG</a><br>
+
+
+
+
+<script>
+
+myApp.onBoxDimChange = function() {
+
+
+    pxPerIn = +document.getElementById("pxPerIn").value;
+    
+    boxWidth = +document.getElementById("boxWidth").value;
+    boxLength = +document.getElementById("boxLength").value;
+    boxHeight = +document.getElementById("boxHeight").value;
+    fingerLength = +document.getElementById("fingerLength").value;
+
+    boardData = myApp.makeBoardData(boxWidth, boxLength, boxHeight, fingerLength);
+    
+    var boards = myApp.update(boardData);
+    myApp.layoutBoards(boards);
+}
+
+// boards is a d3 selection of the all the boards (svg groups), 
+// bound to their corresponding data
+myApp.layoutBoards = function(boards) {
+
+    var spacing = 10; // px
+    var xoffset = 20; // px
+    var yoffset = 20; // px
+    
+    var totalY = yoffset;
+    
+    boards
+        .transition()
+        .duration(3000)
+        .attr("transform", function(d) { 
+            var ret = "translate (" + xoffset + ", " + totalY + ")";
+            totalY += (d.height * d.pxPerIn + spacing); // setting up for next one
+            return  ret;
+        });
+}
+
+
+    var pxPerIn = 30;
+    
+    var boxWidth = 8;
+    var boxLength = 4;
+    var boxHeight = 3;
+    
+    var fingerLength = 1;
+    
+    var svgWidth = 600;
+    var svgHeight = 400;
+
+    var boardData = myApp.makeBoardData(boxWidth, boxLength, boxHeight, fingerLength);
+    
+    // todo revisit this function
+    buildInfoArea();
+
+    var svgContainer = d3.select("body")
+        .append("div")
+        .style("border", "1px solid black");
+        
+    // build svg and boards    
+    var svg = svgContainer
+        .append("svg")
+        .attr("id", "svg")
+        .attr("width", svgWidth)
+        .attr("height", svgHeight)
+        //.style("border", "1px solid black")
+        ;
+        
+    var boards = myApp.update(boardData);
+    myApp.layoutBoards(boards);
+          
+    d3.select("#link")
+        .on("click", myApp.prepareSvgExport);
+        
+</script>
+
+</body>
+</html>
+
+

@@ -9,9 +9,19 @@
 
     <!-- Bootstrap 
     <link href="vendor/bootstrap/bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet">-->
-    <script src="toolpathing/tlpt.min.js"></script>
+    
     <script src="vendor/jquery/jquery-2.1.0.min.js"></script>
+    
+    <script src="actp/mathUtil.js"></script>
+    <script src="actp/directionMap.js"></script>
+    <script src="actp/vectorize.js"></script>
+    <script src="actp/distTrans.js"></script>
+    <script src="actp/path.js"></script>
+    <script src="actp/acGreyImage.js"></script> 
+    <script src="actp/toolpathing.js"></script> 
+
     <script src="webCAM.js"></script>
+    
     
     <link href="css/style1.css" rel="stylesheet">
   
@@ -24,8 +34,8 @@
         <h1 id="topstring">Load an image file ...</h1>
         
         <div id="toolbar" >
-            <button id="btn0" class="btn btn-primary" onclick="webCAM.OnLoadImage()">Load File</button>
-            <button id="btn1" class="btn btn-primary" onclick="webCAM.OnDrawToolpaths()">Show Toolpaths</button> 
+            <button id="btn0" class="btn btn-primary" onclick="WebCAM.OnLoadImage()">Load File</button>
+            <button id="btn1" class="btn btn-primary" onclick="WebCAM.OnDrawToolpaths()">Show Toolpaths</button> 
         </div>
 
         <div id="param-input-container">
@@ -63,7 +73,7 @@
     </div> <!-- nav -->
     </div><!-- header area, buttons and inputs -->
     
-    <div style="position: relative;" width="810" height="410">
+    <div style="position: relative;" width="600" height="600">
         <canvas id="image-canvas" width="600" height="600" ></canvas>    
         <canvas id="path-canvas"  width="600" height="600" ></canvas> 
     </div>

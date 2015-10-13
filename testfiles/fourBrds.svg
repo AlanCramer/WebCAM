@@ -1,0 +1,115 @@
+<?xml version="1.0" standalone="no"?>
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" id="svg" width="600" height="400">
+<g class="board" transform="translate(20,20)">
+<rect height="60" width="240" y="0" x="0" style="fill: rgb(0,0,0);"/>
+<g class="leftFingerJoint" transform="translate (0,0) rotate(-90)">
+<rect class="fjRect" x="-7.5" y="0" width="15" height="7.5" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircA" cx="-5.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircB" cx="5.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+</g>
+<g class="leftFingerJoint" transform="translate (0,0) rotate(-90)">
+<rect class="fjRect" x="-37.5" y="0" width="15" height="7.5" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircA" cx="-35.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircB" cx="-24.9" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+</g>
+<g class="leftFingerJoint" transform="translate (0,0) rotate(-90)">
+<rect class="fjRect" x="-67.5" y="0" width="15" height="7.5" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircA" cx="-65.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircB" cx="-54.9" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+</g>
+<g class="rightFingerJoint" transform="translate(240,60)rotate(90)">
+<rect class="fjRect" x="-7.5" y="0" width="15" height="7.5" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircA" cx="-5.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircB" cx="5.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+</g>
+<g class="rightFingerJoint" transform="translate(240,60)rotate(90)">
+<rect class="fjRect" x="-37.5" y="0" width="15" height="7.5" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircA" cx="-35.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircB" cx="-24.9" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+</g>
+<g class="rightFingerJoint" transform="translate(240,60)rotate(90)">
+<rect class="fjRect" x="-67.5" y="0" width="15" height="7.5" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircA" cx="-65.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircB" cx="-54.9" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+</g>
+</g>
+<g class="board" transform="translate(20,90)">
+<rect height="60" width="120" y="0" x="0" style="fill: rgb(0,0,0);"/>
+<g class="leftFingerJoint" transform="translate (0,0) rotate(-90)">
+<rect class="fjRect" x="-22.5" y="0" width="15" height="7.5" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircA" cx="-20.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircB" cx="-9.9" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+</g>
+<g class="leftFingerJoint" transform="translate (0,0) rotate(-90)">
+<rect class="fjRect" x="-52.5" y="0" width="15" height="7.5" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircA" cx="-50.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircB" cx="-39.9" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+</g>
+<g class="rightFingerJoint" transform="translate(120,60)rotate(90)">
+<rect class="fjRect" x="-22.5" y="0" width="15" height="7.5" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircA" cx="-20.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircB" cx="-9.9" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+</g>
+<g class="rightFingerJoint" transform="translate(120,60)rotate(90)">
+<rect class="fjRect" x="-52.5" y="0" width="15" height="7.5" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircA" cx="-50.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircB" cx="-39.9" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+</g>
+</g>
+<g class="board" transform="translate(20,160)">
+<rect height="60" width="240" y="0" x="0" style="fill: rgb(0,0,0);"/>
+<g class="leftFingerJoint" transform="translate (0,0) rotate(-90)">
+<rect class="fjRect" x="-7.5" y="0" width="15" height="7.5" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircA" cx="-5.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircB" cx="5.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+</g>
+<g class="leftFingerJoint" transform="translate (0,0) rotate(-90)">
+<rect class="fjRect" x="-37.5" y="0" width="15" height="7.5" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircA" cx="-35.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircB" cx="-24.9" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+</g>
+<g class="leftFingerJoint" transform="translate (0,0) rotate(-90)">
+<rect class="fjRect" x="-67.5" y="0" width="15" height="7.5" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircA" cx="-65.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircB" cx="-54.9" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+</g>
+<g class="rightFingerJoint" transform="translate(240,60)rotate(90)">
+<rect class="fjRect" x="-7.5" y="0" width="15" height="7.5" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircA" cx="-5.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircB" cx="5.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+</g>
+<g class="rightFingerJoint" transform="translate(240,60)rotate(90)">
+<rect class="fjRect" x="-37.5" y="0" width="15" height="7.5" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircA" cx="-35.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircB" cx="-24.9" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+</g>
+<g class="rightFingerJoint" transform="translate(240,60)rotate(90)">
+<rect class="fjRect" x="-67.5" y="0" width="15" height="7.5" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircA" cx="-65.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircB" cx="-54.9" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+</g>
+</g>
+<g class="board" transform="translate(20,230)">
+<rect height="60" width="120" y="0" x="0" style="fill: rgb(0,0,0);"/>
+<g class="leftFingerJoint" transform="translate (0,0) rotate(-90)">
+<rect class="fjRect" x="-22.5" y="0" width="15" height="7.5" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircA" cx="-20.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircB" cx="-9.9" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+</g>
+<g class="leftFingerJoint" transform="translate (0,0) rotate(-90)">
+<rect class="fjRect" x="-52.5" y="0" width="15" height="7.5" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircA" cx="-50.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircB" cx="-39.9" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+</g>
+<g class="rightFingerJoint" transform="translate(120,60)rotate(90)">
+<rect class="fjRect" x="-22.5" y="0" width="15" height="7.5" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircA" cx="-20.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircB" cx="-9.9" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+</g>
+<g class="rightFingerJoint" transform="translate(120,60)rotate(90)">
+<rect class="fjRect" x="-52.5" y="0" width="15" height="7.5" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircA" cx="-50.1" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+<circle class="fjCircB" cx="-39.9" cy="7.5" r="2.4" style="fill: rgb(255, 255, 255);"/>
+</g>
+</g>
+</svg>
