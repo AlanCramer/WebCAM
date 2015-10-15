@@ -1,7 +1,7 @@
 
 (function(webCAM) {
     
-    webCAM.image = {};
+    webCAM.image = null;
     webCAM.toolpaths = [];
     webCAM.pxPerIn = 1; // ??
     
@@ -35,6 +35,7 @@
         pathCanvas.width = xdim*pxPerIn;
         pathCanvas.height = ydim*pxPerIn;
         
+        webCAM.DrawImageCanvas();
     };
     
     webCAM.OnExportGCode = function() {
@@ -58,7 +59,9 @@
         ctx.fillStyle = "white";
         ctx.fillRect(0,0,canvas.width, canvas.height); // draw white, 
       
-        ctx.drawImage(webCAM.image, 0, 0, canvas.width, canvas.height);
+        var img = webCAM.image;
+        if (img)
+            ctx.drawImage(webCAM.image, 0, 0, img.width, img.height);
         
         this.clearPathCanvas();
     };
@@ -105,9 +108,8 @@
     webCAM.clearPathCanvas = function() {
         
         var canvas = document.getElementById('path-canvas');
-        var ctx = canvas.getContext('2d');
-        ctx.fillStyle = "white";
-        ctx.clearRect(0, 0, canvas.width, canvas.height); // note the diff to image canvas      
+        var ctx = canvas.getContext('2d');  
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // note the diff to image canvas     
     };
     
     webCAM.OnLoadImage = function() {

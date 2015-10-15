@@ -255,7 +255,7 @@
 
     ACTP.Path.prototype.drawPtDirs = function(ctx, ptdirs) {
             
-        //ctx.beginPath(); 
+        ctx.beginPath(); 
         
         for (i=0; i < ptdirs.length; ++i) {
             
