@@ -54,6 +54,25 @@
         Solving the 2.5 D problem <link>
         </p>
         <hr>    
+        
+        <h2>About Resolutions</h2>
+        <p class="content"> 
+        There are several related concepts about resolutions.         
+        <ul class="texty-list">
+            <li> <b>Import Image Resolution</b> <br> Imported images have a width and height. PNG and SVG might map these 
+                to physical units.
+            </li>
+            <li> <b>Canvas Model Resolution</b> <br> When the canvas is created, there is a width and height. 
+                This describes the canvas model. 
+            </li>
+            <li> <b>Canvas Display Resolution</b> <br> The canvas can be styled and given a new width and height.
+                This changes how the canvas gets displayed but not the underlying model. 
+            </li>
+            <li> <b>Toolpath Calculation Resoution</b> <br>To calculate the toolpaths, the canvas will be copied to another
+                image which is not displayed. This image can have yet another resolution. 
+            </li>
+        </ul>
+        <hr> 
 
     </div> <!-- section -->
     

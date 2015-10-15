@@ -95,6 +95,12 @@ button{
     margin-left:10px;
 }
 
+/* for docs, some spacing */
+.texty-list li{
+
+    margin:15px;
+}
+
 .aside {
     font-size: 16px;
     float: left;

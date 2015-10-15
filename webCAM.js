@@ -35,6 +35,7 @@
         pathCanvas.width = xdim*pxPerIn;
         pathCanvas.height = ydim*pxPerIn;
         
+        webCAM.clearPathCanvas();
         webCAM.DrawImageCanvas();
     };
     
@@ -49,6 +50,7 @@
         
     };
     
+    // redraws image canvas, probably want to clear path canvas 
     webCAM.DrawImageCanvas = function() {
         
         // todo - image resolution vs dimensions
@@ -62,8 +64,6 @@
         var img = webCAM.image;
         if (img)
             ctx.drawImage(webCAM.image, 0, 0, img.width, img.height);
-        
-        this.clearPathCanvas();
     };
     
     webCAM.DrawPathCanvas = function() {
