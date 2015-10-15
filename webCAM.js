@@ -29,11 +29,24 @@
         
         var pxPerIn = parseFloat($("#pxPerIn").val());
 
+        
         imgCanvas.width = xdim*pxPerIn;
         imgCanvas.height = ydim*pxPerIn;
         
         pathCanvas.width = xdim*pxPerIn;
-        pathCanvas.height = ydim*pxPerIn;
+        pathCanvas.height = ydim*pxPerIn;    
+        
+        if (webCAM.image) {
+            webCAM.image.width = xdim*pxPerIn;
+            webCAM.image.height = ydim*pxPerIn;   
+        }
+            
+        
+        // imgCanvas.style.width = "" + xdim*pxPerIn + "px";
+        // imgCanvas.style.height = "" + ydim*pxPerIn+ "px";
+        
+        // pathCanvas.style.width = "" +xdim*pxPerIn+ "px";
+        // pathCanvas.style.height = "" +ydim*pxPerIn+ "px";    
         
         webCAM.clearPathCanvas();
         webCAM.DrawImageCanvas();
@@ -145,6 +158,11 @@ $(document).ready(function() {
     
     document.getElementById('openimage').addEventListener('change', webCAM.handleFileSelect, false);
     webCAM.resizeDisplayCanvas();
+    
+    var svg = d3.select("#canvasSvg")
+        .style("border", "2px solid orange")
+        ;   
+    
 });
 
 

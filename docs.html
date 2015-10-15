@@ -59,14 +59,23 @@
         <p class="content"> 
         There are several related concepts about resolutions.         
         <ul class="texty-list">
-            <li> <b>Import Image Resolution</b> <br> Imported images have a width and height. PNG and SVG might map these 
-                to physical units.
+            <li> <b>Imported Image Model Resolution</b> <br> Imported images have a width and height as part of the file.
+                PNG and SVG might map these to physical units. When the image is read in, these units are 
+                reflected in the image.naturalWidth and image.naturalHeight.
+            </li>
+            <li> <b>Imported Image Display Resolution</b> <br> When the image is rendered, it can be assigned a 
+                width and height in canvas model units. This is held in the image.width and image.height.
             </li>
             <li> <b>Canvas Model Resolution</b> <br> When the canvas is created, there is a width and height. 
                 This describes the canvas model. 
             </li>
             <li> <b>Canvas Display Resolution</b> <br> The canvas can be styled and given a new width and height.
-                This changes how the canvas gets displayed but not the underlying model. 
+                This changes how the canvas gets displayed but not the underlying model. This seems like it 
+                would be a useful parameter for zooming in on the scene. But unfortunately browsers don't do
+                this very well. My guess is they double the pixels and then blur. So the result is bigger but fuzzy.
+                Ideally, a vector image like SVG would scale and maintain crisp edges 
+                and a bitmap image like PNG would pixelate. Yes, we want it to pixelate because that's what input
+                image told us to do. <br> So we don't want to change this parameter.
             </li>
             <li> <b>Toolpath Calculation Resoution</b> <br>To calculate the toolpaths, the canvas will be copied to another
                 image which is not displayed. This image can have yet another resolution. 
