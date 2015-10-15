@@ -11,16 +11,27 @@ body {
     background-color: #fefefe;
 }
 
+
 #toolbar {
     margin-bottom: 10px;
 } 
+
+.row {
+    //width:100%;
+    //display:block;
+}
+
 .input-label {
+    width:50%;
     float: left;
     margin-left:5px;
 }
 .input-real {
-    margin-left: 10px;
+    //font-size: 15px;
+    width: 30%;
+    margin-left: 0px;
 }
+
 #axisScaleInputs {
     margin-bottom: 15px;
 }
@@ -38,9 +49,6 @@ button{
     padding-left:12px;
     padding-right:12px;
     cursor:pointer;
-}
-.input-real{
-    width:100px;
 }
 
 #param-input-container {

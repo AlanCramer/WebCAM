@@ -12,6 +12,7 @@
     
     <script src="vendor/jquery/jquery-2.1.0.min.js"></script>
     
+    
     <script src="actp/mathUtil.js"></script>
     <script src="actp/directionMap.js"></script>
     <script src="actp/vectorize.js"></script>
@@ -19,9 +20,11 @@
     <script src="actp/path.js"></script>
     <script src="actp/acGreyImage.js"></script> 
     <script src="actp/toolpathing.js"></script> 
+    <script src="actp/pathGCode.js"></script> 
 
-    <script src="webCAM.js"></script>
     
+    <script src="webCAM.js"></script> <!-- defines webCAM namespace -->
+    <script src="webCam/fileUtil.js"></script>     
     
     <link href="css/style1.css" rel="stylesheet">
   
@@ -34,31 +37,31 @@
         <h1 id="topstring">Load an image file ...</h1>
         
         <div id="toolbar" >
-            <button id="btn0" class="btn btn-primary" onclick="WebCAM.OnLoadImage()">Load File</button>
-            <button id="btn1" class="btn btn-primary" onclick="WebCAM.OnDrawToolpaths()">Show Toolpaths</button> 
-        </div>
+            <button id="btnLoadImg" onclick="webCAM.OnLoadImage()">Load Image</button>
+            <button id="btnShowTP" onclick="webCAM.OnDrawToolpaths()">Show Toolpaths</button> 
+            <button id="btnExpGCode" onclick="webCAM.OnExportGCode()">Export G Code</button> 
+      
+      </div>
 
         <div id="param-input-container">
         <div id="axisScaleInputs" >
-          <h4> Canvas to Reality Scale</h4>
-          <div class="row">
-            <label for="xAxisScale" class="col-md-2 input-label">X Axis</label>
-            <div class="col-md-1">
-              <input type="number" class="input-real" id="xAxisScale" placeholder="20">
+            <h4> Canvas to Reality Scale</h4>
+            <div class="row">
+                <label class="input-label">X Axis</label>
+                <input type="number" class="input-real" id="xAxisScale" value="20">
             </div>
-          </div>
-          <div class="row">
-            <label for="yAxisScale" class="col-md-2 input-label">Y Axis</label>
-            <div class="col-md-1">
-              <input type="number" class="input-real" id="yAxisScale" placeholder="16">
+            <div class="row">
+                <label class="input-label">Y Axis</label>
+                <input type="number" class="input-real" id="yAxisScale" value="16">
             </div>
-          </div>
-          <div class="row">
-            <label for="zAxisScale" class="col-md-2 input-label">Z Axis</label>
-            <div class="col-md-1">
-              <input type="number" class="input-real" id="zAxisScale" placeholder="3">
+            <div class="row">
+                <label class="input-label">Z Axis</label>
+                <input type="number" class="input-real" id="zAxisScale" value="3">
             </div>
-          </div>
+            <div class="row">
+                <label class="input-label">Display px per Inch</label>
+                <input type="number" class="input-real" id="pxPerIn" value="3">
+            </div>
         </div>
         
         <div id="toolbitInfo" >
@@ -66,14 +69,14 @@
           <div class="row">
             <label for="bitdiam" class="col-md-2 input-label">Bit Diameter (in)</label>
             <div class="col-md-1">
-              <input type="number" class="input-real" id="bitdiam" placeholder=".25">
+              <input type="number" class="input-real" id="bitdiam" value=".25">
             </div>
           </div>
         </div> <!-- toolbitInfo -->        
     </div> <!-- nav -->
     </div><!-- header area, buttons and inputs -->
     
-    <div style="position: relative;" width="600" height="600">
+    <div style="position: relative;" >
         <canvas id="image-canvas" width="600" height="600" ></canvas>    
         <canvas id="path-canvas"  width="600" height="600" ></canvas> 
     </div>
