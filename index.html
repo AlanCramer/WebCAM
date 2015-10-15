@@ -48,37 +48,35 @@
             <h4> Canvas to Reality Scale</h4>
             <div class="row">
                 <label class="input-label">X Axis</label>
-                <input type="number" class="input-real" id="xAxisScale" value="20">
+                <input type="number" class="input-real" id="xAxisScale" onchange="webCAM.OnScaleChange()" value="20">
             </div>
             <div class="row">
                 <label class="input-label">Y Axis</label>
-                <input type="number" class="input-real" id="yAxisScale" value="16">
+                <input type="number" class="input-real" id="yAxisScale" onchange="webCAM.OnScaleChange()" value="16">
             </div>
             <div class="row">
                 <label class="input-label">Z Axis</label>
-                <input type="number" class="input-real" id="zAxisScale" value="3">
+                <input type="number" class="input-real" id="zAxisScale"  onchange="webCAM.OnScaleChange()" value="3">
             </div>
             <div class="row">
                 <label class="input-label">Display px per Inch</label>
-                <input type="number" class="input-real" id="pxPerIn" value="3">
+                <input type="number" class="input-real" id="pxPerIn"  onchange="webCAM.OnScaleChange()"  value="30">
             </div>
         </div>
         
         <div id="toolbitInfo" >
           <h4> Toolbit Information </h4>
           <div class="row">
-            <label for="bitdiam" class="col-md-2 input-label">Bit Diameter (in)</label>
-            <div class="col-md-1">
+              <label for="bitdiam" class="col-md-2 input-label">Bit Diameter (in)</label>
               <input type="number" class="input-real" id="bitdiam" value=".25">
-            </div>
           </div>
         </div> <!-- toolbitInfo -->        
     </div> <!-- nav -->
     </div><!-- header area, buttons and inputs -->
     
     <div style="position: relative;" >
-        <canvas id="image-canvas" width="600" height="600" ></canvas>    
-        <canvas id="path-canvas"  width="600" height="600" ></canvas> 
+        <canvas id="image-canvas" width="200" height="200" ></canvas>    
+        <canvas id="path-canvas"  width="200" height="200" ></canvas> 
     </div>
 
 

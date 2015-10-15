@@ -12,6 +12,31 @@
         this.DrawPathCanvas();
     };
     
+    webCAM.OnScaleChange = function() {
+      
+        this.resizeDisplayCanvas();
+      
+    };
+    
+    webCAM.resizeDisplayCanvas = function() {
+      
+        var imgCanvas = document.getElementById('image-canvas');
+        var pathCanvas = document.getElementById('path-canvas');
+        
+        var xdim = parseFloat($("#xAxisScale").val());
+        var ydim = parseFloat($("#yAxisScale").val());
+        //var zdim = parseFloat($("#zAxisScale").val());
+        
+        var pxPerIn = parseFloat($("#pxPerIn").val());
+
+        imgCanvas.width = xdim*pxPerIn;
+        imgCanvas.height = ydim*pxPerIn;
+        
+        pathCanvas.width = xdim*pxPerIn;
+        pathCanvas.height = ydim*pxPerIn;
+        
+    };
+    
     webCAM.OnExportGCode = function() {
     
         // currently have 1 toolpath object, 
@@ -117,6 +142,7 @@
 $(document).ready(function() {
     
     document.getElementById('openimage').addEventListener('change', webCAM.handleFileSelect, false);
+    webCAM.resizeDisplayCanvas();
 });
 
 
