@@ -63,8 +63,43 @@
         
     };
     
+    
+    webCAM.drawBBox = function() {
+        
+        var that = this;
+        var imgSel = d3.select(this);
+        
+        var svg = d3.select("#canvasSvg");
+        
+        svg.append("circle")
+            .attr("class", "manip")
+            .attr("cx", this.x.baseVal.value)
+            .attr("cy", this.y.baseVal.value) 
+            .attr("r", 10)
+            .style("fill", "orange")
+            ;
+    }
+    
+    webCAM.eraseBBox = function() {
+        
+        var that = this;
+        var imgSel = d3.select(this);
+        
+        var svg = d3.select("#canvasSvg");
+        
+        svg.selectAll(".manip")
+            .remove();
+    }
+    
+    function dragmove(d) {
+      d3.select(this)
+          .attr("x", d3.event.x)
+          .attr("y", d3.event.y);
+    };
+    
     // redraws image canvas, probably want to clear path canvas 
-    webCAM.DrawImageCanvas = function() {
+    webCAM.DrawImageCanvas = function() 
+    {
         
         // todo - image resolution vs dimensions
         // display dimension should be not relevant 
@@ -75,8 +110,27 @@
         ctx.fillRect(0,0,canvas.width, canvas.height); // draw white, 
       
         var img = webCAM.image;
-        if (img)
+        if (img) {
             ctx.drawImage(webCAM.image, 0, 0, img.width, img.height);
+         
+            var drag = d3.behavior.drag()
+                .origin(function(d) {
+                        var img = d3.select(this);
+                        return {x: img.attr("x"), y: img.attr("y")}; 
+                })
+                .on("drag", dragmove);
+         
+            var svg = d3.select("#canvasSvg");
+            var imgs = svg.selectAll("image").data([img]);
+            imgs.enter()
+                .append("svg:image")
+                .attr("width", img.width/2) 
+                .attr("height", img.height/2)
+                .attr("xlink:href", img.src)
+                //.on("mouseover", webCAM.drawBBox)
+                //.on("mouseout", webCAM.eraseBBox)
+                .call(drag);
+        }    
     };
     
     webCAM.DrawPathCanvas = function() {
@@ -140,6 +194,7 @@
         
         fileReadAsDataUrl.onload = (function(progEvt) {
 
+            console.log("in onload");
             var imageAsDataUrl = progEvt.target.result;
             
             var img = new Image();
