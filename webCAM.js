@@ -71,12 +71,15 @@
         
         var svg = d3.select("#canvasSvg");
         
-        svg.append("circle")
+        svg.append("rect")
             .attr("class", "manip")
-            .attr("cx", this.x.baseVal.value)
-            .attr("cy", this.y.baseVal.value) 
-            .attr("r", 10)
-            .style("fill", "orange")
+            .attr("x", this.x.baseVal.value)
+            .attr("y", this.y.baseVal.value) 
+            .attr("width", this.width.baseVal.value)
+            .attr("height", this.height.baseVal.value)
+            .style("stroke-width", "1")
+            .style("fill", "none")
+            .style("stroke", "orange")
             ;
     }
     
@@ -91,10 +94,24 @@
             .remove();
     }
     
+    var drag = d3.behavior.drag()
+        .origin(function(d) {
+                var img = d3.select(this);
+                return {x: img.attr("x"), y: img.attr("y")}; 
+        })
+        .on("drag", dragmove);
+    
     function dragmove(d) {
-      d3.select(this)
-          .attr("x", d3.event.x)
-          .attr("y", d3.event.y);
+        d3.select(this)
+            .attr("x", d3.event.x)
+            .attr("y", d3.event.y);
+          
+        // todo only associated manips, of course  
+        d3.select(".manip")
+            .attr("x", d3.event.x)
+            .attr("y", d3.event.y);         
+          
+          
     };
     
     // redraws image canvas, probably want to clear path canvas 
@@ -113,13 +130,6 @@
         if (img) {
             ctx.drawImage(webCAM.image, 0, 0, img.width, img.height);
          
-            var drag = d3.behavior.drag()
-                .origin(function(d) {
-                        var img = d3.select(this);
-                        return {x: img.attr("x"), y: img.attr("y")}; 
-                })
-                .on("drag", dragmove);
-         
             var svg = d3.select("#canvasSvg");
             var imgs = svg.selectAll("image").data([img]);
             imgs.enter()
@@ -127,8 +137,8 @@
                 .attr("width", img.width/2) 
                 .attr("height", img.height/2)
                 .attr("xlink:href", img.src)
-                //.on("mouseover", webCAM.drawBBox)
-                //.on("mouseout", webCAM.eraseBBox)
+                .on("mouseover", webCAM.drawBBox)
+                .on("mouseout", webCAM.eraseBBox)
                 .call(drag);
         }    
     };
