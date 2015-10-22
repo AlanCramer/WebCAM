@@ -4,6 +4,8 @@
     webCAM.image = null;
     webCAM.toolpaths = [];
     webCAM.pxPerIn = 1; // ??
+    webCAM.svgW = 500;
+    webCAM.svgH = 500;
     
     webCAM.OnDrawToolpaths = function() {
 
@@ -15,7 +17,7 @@
     webCAM.OnScaleChange = function() {
       
         this.resizeDisplayCanvas();
-      
+        this.setupSvg();
     };
     
     webCAM.resizeDisplayCanvas = function() {
@@ -189,6 +191,67 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height); // note the diff to image canvas     
     };
     
+    webCAM.getUserScale = function() {
+
+        var xdim = parseFloat($("#xAxisScale").val());
+        var ydim = parseFloat($("#yAxisScale").val());
+        
+        var pxPerIn = parseFloat($("#pxPerIn").val());    
+        
+        return {x: xdim, y:ydim, pxPerIn: pxPerIn};
+    };
+    
+    webCAM.setupSvg = function() {
+
+        var svgPaddingW = 50;
+        var svgPaddingH = 50;
+        
+        var us = this.getUserScale();
+        
+        webCAM.svgW = us.x*us.pxPerIn + svgPaddingW;
+        webCAM.svgH = us.y*us.pxPerIn + svgPaddingH;
+        
+        var svgWorkingW = webCAM.svgW-svgPaddingW;
+        var svgWorkingH = webCAM.svgH-svgPaddingH;
+        
+        var svg = d3.select("#canvasSvg")
+            .style("border", "2px solid #9bb")
+            .attr("width", webCAM.svgW)            
+            .attr("height", webCAM.svgH)            
+        ;
+        
+        var xScale = d3.scale.linear()
+            .domain([0, us.x]) 
+            .range([0, svgWorkingW]);
+        
+        var yScale = d3.scale.linear()
+            .domain([0, us.y]) 
+            .range([0, svgWorkingH]);
+        
+        var xAxis = d3.svg.axis()
+            .scale(xScale)
+            .orient("top")
+            ;
+        
+        var yAxis = d3.svg.axis()
+            .scale(yScale)
+            .orient("left")
+            ;
+        
+        svg.selectAll(".axis")
+            .remove();
+        
+        svg.append("g")
+            .attr("class", "axis")
+             .attr("transform", "translate( " + svgPaddingW  + ", " + svgPaddingH + ")")   // 
+            .call(xAxis);
+            
+        svg.append("g")
+            .attr("class", "axis")
+            .attr("transform", "translate(" + svgPaddingW +", " + svgPaddingH + ")")
+            .call(yAxis);   
+    };
+    
     webCAM.OnLoadImage = function() {
 
         var fileElem = $("#openimage");
@@ -224,9 +287,9 @@ $(document).ready(function() {
     document.getElementById('openimage').addEventListener('change', webCAM.handleFileSelect, false);
     webCAM.resizeDisplayCanvas();
     
-    var svg = d3.select("#canvasSvg")
-        .style("border", "2px solid orange")
-        ;   
+    webCAM.setupSvg();
+    
+    
     
 });
 
