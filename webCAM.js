@@ -3,7 +3,6 @@
     
     webCAM.image = null;
     webCAM.toolpaths = [];
-    webCAM.pxPerIn = 1; // ??
     webCAM.svgW = 500;
     webCAM.svgH = 500;
     
@@ -38,10 +37,10 @@
         pathCanvas.width = xdim*pxPerIn;
         pathCanvas.height = ydim*pxPerIn;    
         
-        if (webCAM.image) {
-            webCAM.image.width = xdim*pxPerIn;
-            webCAM.image.height = ydim*pxPerIn;   
-        }
+        // if (webCAM.image) {
+            // webCAM.image.width = xdim*pxPerIn;
+            // webCAM.image.height = ydim*pxPerIn;   
+        // }
             
         
         // imgCanvas.style.width = "" + xdim*pxPerIn + "px";
@@ -132,13 +131,23 @@
         if (img) {
             ctx.drawImage(webCAM.image, 0, 0, img.width, img.height);
          
+            var pxPerInImg = parseFloat($("#pxPerInImg").val()); 
+            var pxPerIn = parseFloat($("#pxPerIn").val()); 
+            
+            var imgW = img.width*pxPerIn/pxPerInImg; // converted to display 
+            var imgH = img.width*pxPerIn/pxPerInImg;
+         
             var svg = d3.select("#canvasSvg");
             var imgs = svg.selectAll("image").data([img]);
-            imgs.enter()
+            
+            imgs
+                .enter()
                 .append("svg:image")
-                .attr("width", img.width/2) 
-                .attr("height", img.height/2)
-                .attr("xlink:href", img.src)
+                .attr("xlink:href", img.src);
+            
+            imgs
+                .attr("width", imgW) 
+                .attr("height", imgH)
                 .on("mouseover", webCAM.drawBBox)
                 .on("mouseout", webCAM.eraseBBox)
                 .call(drag);
@@ -196,9 +205,10 @@
         var xdim = parseFloat($("#xAxisScale").val());
         var ydim = parseFloat($("#yAxisScale").val());
         
-        var pxPerIn = parseFloat($("#pxPerIn").val());    
+        var pxPerIn = parseFloat($("#pxPerIn").val());  
+        var pxPerInImg = parseFloat($("#pxPerInImg").val());  
         
-        return {x: xdim, y:ydim, pxPerIn: pxPerIn};
+        return {x: xdim, y:ydim, pxPerIn: pxPerIn, pxPerInImg: pxPerInImg};
     };
     
     webCAM.setupSvg = function() {
