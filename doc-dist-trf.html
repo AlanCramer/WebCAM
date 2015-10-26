@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title> ACTP Documentation </title>
+    
+    <link href="css/style1.css" rel="stylesheet">
+    <script src="vendor/d3/d3.min.js"></script>
+    
+    <style>
+
+    html {
+        min-width: 600;
+    }
+    
+    body {
+        width:600px;
+        margin: 20px auto;
+    }
+    
+    #px-container {
+        margin-left:10px;
+        width: 532px;
+    }
+    
+    svg {
+
+      float: left;
+      border-bottom: solid 1px #ccc;
+      border-right: solid 1px #ccc;
+      border-top: solid 1px #ccc;
+      border-left: solid 1px #ccc;
+      margin-right: -1px;
+      margin-bottom: -1px;
+      fill: #bbb;
+    }
+
+    </style>
+    
+</head>
+
+<body>
+    <h1 id="body-title" class="title">What is a Distance Transform</h1>
+    
+    <div class="section content">
+        <h1>It's about the pixels</h1>
+    
+        <p class="content"> 
+        Key to the toolpathing strategy is converting the scene to a set of boxes where the distance from the do-not-touch region can be calculated. This is the first step in 'vectorizing' the image. 
+    
+        <p>
+        <div id="px-container"></div>
+        
+    <script>
+        
+        var pxW = 32;
+        var pxH = 32;
+        
+        var data = d3.range(256).map(function(i) { return {x: pxW / 2, y: pxH / 2, val: -1}; }) 
+        
+        var pxContainer = d3.select("#px-container");
+        
+        var isMouseDown = false;
+        var drawMode = true;
+        
+        var svgs = pxContainer.selectAll("svg")
+            .data(data)
+        .enter().append("svg")
+            .attr("width", pxW)
+            .attr("height", pxH)
+            .on("mousedown", function() {
+                isMouseDown = true;
+                d3.event.preventDefault();
+                
+                var thisSel = d3.select(this);
+                var d = thisSel.datum();
+                drawMode = (d.val < 0);
+                
+            })
+            .on("mouseup", function() {
+                isMouseDown = false;
+            })
+            .on("mouseover", function() { 
+            
+                if (isMouseDown) {
+                    var thisSel = d3.select(this);
+                    var thisSelData = thisSel.data()[0];
+                    var val = thisSelData.val;
+                    
+                    val = drawMode ? 0 : -1;
+                    console.log("mode: " + drawMode + " val: " + val.toString());
+                    
+                    thisSelData.val = val;
+                    var clr = val === 0 ? "#009"  : "#fff";
+                    thisSel.select("text").text(val);                    
+                    thisSel.style("background", clr);
+                }
+            })                
+        ;
+            
+        svgs.append("text")
+            .attr("x", pxW/2)
+            .attr("y", (3/4)*pxH)
+            .style("text-anchor", "middle")
+            .text(function(d,i) { 
+                return d.val; })
+        ;
+    
+        
+    
+    </script>
+    
+    </div> <!-- content-container -->
+</body>
+
+</html>

@@ -129,11 +129,12 @@
       
         var img = webCAM.image;
         if (img) {
-            ctx.drawImage(webCAM.image, 0, 0, img.width, img.height);
-         
+            
             var pxPerInImg = parseFloat($("#pxPerInImg").val()); 
             var pxPerIn = parseFloat($("#pxPerIn").val()); 
             
+            ctx.drawImage(webCAM.image, 0, 0, img.width*pxPerIn/pxPerInImg, img.height*pxPerIn/pxPerInImg);
+     
             var imgW = img.width*pxPerIn/pxPerInImg; // converted to display 
             var imgH = img.width*pxPerIn/pxPerInImg;
          
