@@ -36,6 +36,18 @@
       fill: #bbb;
     }
 
+    button{
+        background-color:#038;
+        color:#fff;
+        font-size: 18px;
+        border: none;
+        border-radius: 8px;
+        padding:8px;
+        padding-left:12px;
+        padding-right:12px;
+        cursor:pointer;
+    }
+    
     </style>
     
 </head>
@@ -50,6 +62,11 @@
         Key to the toolpathing strategy is converting the scene to a set of boxes where the distance from the do-not-touch region can be calculated. This is the first step in 'vectorizing' the image. 
     
         <p>
+        Click and drag to "color" a region. Then start the algorithm.
+        
+        <button onclick="OnStart()" >Start</button>
+        
+        <p>
         <div id="px-container"></div>
         
     <script>
@@ -57,7 +74,10 @@
         var pxW = 32;
         var pxH = 32;
         
-        var data = d3.range(256).map(function(i) { return {x: pxW / 2, y: pxH / 2, val: -1}; }) 
+        var gridW = 16;
+        var gridH = 16;
+        
+        var data = d3.range(gridW*gridH).map(function(i) { return {x: pxW / 2, y: pxH / 2, val: -1}; }) 
         
         var pxContainer = d3.select("#px-container");
         
@@ -69,6 +89,7 @@
         .enter().append("svg")
             .attr("width", pxW)
             .attr("height", pxH)
+            .attr("id", function(d, i) { return "svg" +i;})
             .on("mousedown", function() {
                 isMouseDown = true;
                 d3.event.preventDefault();
@@ -89,7 +110,6 @@
                     var val = thisSelData.val;
                     
                     val = drawMode ? 0 : -1;
-                    console.log("mode: " + drawMode + " val: " + val.toString());
                     
                     thisSelData.val = val;
                     var clr = val === 0 ? "#009"  : "#fff";
@@ -106,7 +126,59 @@
             .text(function(d,i) { 
                 return d.val; })
         ;
+        
+        function updateElem(id, val) {
+        
+            var svg = d3.select("#svg" + id)
+                .datum(val)
+                .transition()
+                .delay(function(d, i) { return id*300; })
+                .style("background", "#990")
+                .transition()
+                .style("background", "#fff")
+                ;
+                
+            svg.select("text").transition().delay(function(d, i) { return id*300; }).text(val);    
+        }
     
+        function OnStart() {
+        
+            var inArr = data.map(function(obj) { return obj.val} ) ;
+            var outArr = data.map(function(obj) { return obj.val} ) ;
+            var g = { 
+                data: outArr,
+                width: gridW 
+            };
+            
+            inArr.width = gridW;
+            inArr.getAt = function(x,y) {
+                return this[this.width*y + x];
+            }
+        
+            console.log(outArr);
+            
+            m = gridW;
+            n = gridH;
+
+            maxGVal = m + n;
+
+            // phase 1 - define g(i,j)
+            //  todo - last column is uninitialized, what should it be?
+            for (i = 0; i < m; i += 1) {
+
+                g.data[i] = (inArr.getAt(i, 0) === 0) ? 0 : maxGVal;
+                updateElem(i, g.data[i]);
+//                for (j = 1; j < n; j += 1) {
+//                    g.data[j * g.width + i] = (inGreyImg.getAt(i, j) === 0) ? 0 : 1 + g.getAt(i, j - 1);
+//                }
+//
+//                for (j = n - 1; j >= 0; j -= 1) {
+//                    if (g.getAt(i, j+1) < g.getAt(i,j)) {
+//                        g.data[j * g.width + i] = 1 + g.getAt(i, j + 1);
+//                    }
+//                }
+            }
+        }
         
     
     </script>
