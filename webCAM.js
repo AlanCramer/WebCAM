@@ -143,19 +143,22 @@
             // pxs = [imgWidth(in px) / pxPerIn] * pxPerInTP
             canvas.width = img.width*scale;
             canvas.height = img.height*scale;
-            canvas.style.width = "600px";
-            canvas.style.height = "600px";
+            
+            var sz = d3.max([img.width, img.height]);
+            
+            canvas.style.width =  (600/sz)*img.width.toString() + "px";
+            canvas.style.height = (600/sz)*img.height.toString() + "px";
             
             var canv2 = document.getElementById('path-canvas');
             canv2.width = img.width*scale;
             canv2.height = img.height*scale;
-            canv2.style.width = "600px";
-            canv2.style.height = "600px";
+            canv2.style.width = canvas.style.width;
+            canv2.style.height = canvas.style.height;
             
             ctx.drawImage(webCAM.image, 0, 0, img.width*scale, img.height*scale);
      
             var imgW = img.width*pxPerIn/pxPerInImg; // converted to display 
-            var imgH = img.width*pxPerIn/pxPerInImg;
+            var imgH = img.height*pxPerIn/pxPerInImg;
          
             var svg = d3.select("#canvasSvg");
             var imgs = svg.selectAll("image").data([img]);
