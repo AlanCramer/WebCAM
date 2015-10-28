@@ -131,9 +131,27 @@
         if (img) {
             
             var pxPerInImg = parseFloat($("#pxPerInImg").val()); 
+            var pxPerInTP = parseFloat($("#pxPerInTPCalc").val()); 
             var pxPerIn = parseFloat($("#pxPerIn").val()); 
             
-            ctx.drawImage(webCAM.image, 0, 0, img.width*pxPerIn/pxPerInImg, img.height*pxPerIn/pxPerInImg);
+            // how many pixels for the image?
+            var scale = pxPerInTP/pxPerIn;
+            
+            // how many px for the image ? 
+            // pct = (image width)/(svg width) 
+            // pxs = [imgWidth(in px) / pxPerIn] * pxPerInTP
+            canvas.width = img.width*scale;
+            canvas.height = img.height*scale;
+            canvas.style.width = "600px";
+            canvas.style.height = "600px";
+            
+            var canv2 = document.getElementById('path-canvas');
+            canv2.width = img.width*scale;
+            canv2.height = img.height*scale;
+            canv2.style.width = "600px";
+            canv2.style.height = "600px";
+            
+            ctx.drawImage(webCAM.image, 0, 0, img.width*scale, img.height*scale);
      
             var imgW = img.width*pxPerIn/pxPerInImg; // converted to display 
             var imgH = img.width*pxPerIn/pxPerInImg;
@@ -176,13 +194,13 @@
         
         if (tbd) {
             
-            var pxPerIn = 60;
-            tbd *= pxPerIn;
+            var ppi = parseFloat($("#pxPerInTPCalc").val());
+            tbd *= ppi;
         }
         
         var toolCtx = { 
          
-            toolbitDiamInPx: tbd || 12,
+            toolbitDiamInPx: tbd || alert("No Tool bit diam defined"),
         };
         
         var imgCanvas = document.getElementById('image-canvas');

@@ -67,6 +67,11 @@
         <button onclick="OnStart()" >Start</button>
         
         <p>
+        Todo: Phase the algorithm, describe the steps
+        <p>
+        Use this framework to test DT algorithm - make AcGreyImages and display here.
+        
+        <p>
         <div id="px-container"></div>
         
     <script>
@@ -129,16 +134,18 @@
         
         function updateElem(id, val) {
         
+            var clr = (+val === 0) ? "#009" : "#fff";
+        
             var svg = d3.select("#svg" + id)
                 .datum(val)
                 .transition()
-                .delay(function(d, i) { return id*300; })
+                .delay(function(d, i) { return id*100; })
                 .style("background", "#990")
                 .transition()
-                .style("background", "#fff")
+                .style("background", clr)
                 ;
                 
-            svg.select("text").transition().delay(function(d, i) { return id*300; }).text(val);    
+            svg.select("text").transition().delay(function(d, i) { return id*100; }).text(val);    
         }
     
         function OnStart() {
@@ -147,7 +154,10 @@
             var outArr = data.map(function(obj) { return obj.val} ) ;
             var g = { 
                 data: outArr,
-                width: gridW 
+                width: gridW,
+                getAt: function(x,y) {
+                    return this.data[this.width*y + x];
+                }
             };
             
             inArr.width = gridW;
@@ -168,15 +178,70 @@
 
                 g.data[i] = (inArr.getAt(i, 0) === 0) ? 0 : maxGVal;
                 updateElem(i, g.data[i]);
-//                for (j = 1; j < n; j += 1) {
-//                    g.data[j * g.width + i] = (inGreyImg.getAt(i, j) === 0) ? 0 : 1 + g.getAt(i, j - 1);
-//                }
-//
-//                for (j = n - 1; j >= 0; j -= 1) {
-//                    if (g.getAt(i, j+1) < g.getAt(i,j)) {
-//                        g.data[j * g.width + i] = 1 + g.getAt(i, j + 1);
-//                    }
-//                }
+                for (j = 1; j < n; j += 1) {
+                    g.data[j * g.width + i] = (inArr.getAt(i, j) === 0) ? 0 : 1 + g.getAt(i, j - 1);
+                    updateElem(j*g.width + i, g.data[j * g.width + i]);
+                }
+
+                for (j = n - 1; j >= 0; j -= 1) {
+                    if (g.getAt(i, j+1) < g.getAt(i,j)) {
+                        g.data[j * g.width + i] = 1 + g.getAt(i, j + 1);
+                        updateElem(j*g.width + i, g.data[j * g.width + i]);
+                    }
+                }
+            }
+            
+            function Sep(G, y, i, u) {
+
+                "use strict";
+                return Math.floor((u * u - i * i + G.getAt(u, y) * G.getAt(u, y) - G.getAt(i, y) * G.getAt(i, y)) / (2 * (u - i)));
+            }
+
+            // f using EDT is: f(x, i) = (x-i)^2 + g(i)^2
+            //int EDT_f(const AcImage& G, unsigned int y, int x, int i)
+            function EDT_f(G, y, x, i) {
+
+                "use strict";
+                return (x - i) * (x - i) + G.getAt(i, y) * G.getAt(i, y);
+            }
+            
+            
+            for (j = 0; j < n; ++j) {
+                q = 0;
+                s = [];
+                t = [];
+
+                s[0] = 0;
+                t[0] = 0;
+
+                for (u = 1; u < m; ++u) {
+                    while (q >=0 && EDT_f(g, j, t[q], s[q]) > EDT_f(g, j, t[q], u)) {
+                        --q;
+                    }
+
+                    if (q < 0) {
+                        q = 0;
+                        s[0] = u;
+                    }
+                    else {
+                        w = 1 + Sep(g, j, s[q], u);
+                        if (w < m) {
+                            ++q;
+                            s[q] = u;
+                            t[q] = w;
+                        }
+                    }
+                }
+
+                for (u = m; u >=0; --u) {
+                    //dt(u, j) = ...
+                    // todo - how to encapsulate  the lhs?
+                    g.data[j*g.width + u] = EDT_f(g, j, u, s[q]);
+                    //updateElem(j*g.width + u, Math.sqrt(g.data[j * g.width + u]).toFixed(1));
+                    if (u === t[q]) {
+                        --q;
+                    }
+                }
             }
         }
         
