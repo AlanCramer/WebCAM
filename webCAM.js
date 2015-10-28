@@ -57,7 +57,8 @@
     
         // currently have 1 toolpath object, 
     
-        var pxPerMm = 3; // todo ??
+        var pxPerInTP = parseFloat($("#pxPerInTPCalc").val());
+        var pxPerMm = pxPerInTP/25.4;
         var gcode = ACTP.gCodePaths(webCAM.toolpaths, pxPerMm);
         
         webCAM.exportToFile(gcode, "gcodeDownload.nc");
