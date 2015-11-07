@@ -1,6 +1,6 @@
 
 html{
-    min-width:600px;
+    min-width:900px;
 }
 
 body {
@@ -9,6 +9,8 @@ body {
     margin-left:1em;
 
     background-color: #fefefe;
+    width:900;
+
 }
 
 
@@ -54,7 +56,7 @@ button{
 #param-input-container {
     font-size: 12px;
     float: left;
-    width: 250px;
+    width: 260px;
     height: 410px;
     background-color: #f2f2f0;
     padding-left:1%;

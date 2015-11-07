@@ -19,7 +19,7 @@
             
                 var path = curpaths[iPath];
                 // either pathSegments or pathSimpleSegments 
-                gCode += path.gCodeForSegs(path.pathSegments, ceiling, cutHeight, pxPerMm); 
+                gCode += path.gCodeForSegs(path.pathSimpleSegments, ceiling, cutHeight, pxPerMm); 
             }
             cutHeight -= depthPerPass;
         }
@@ -44,7 +44,7 @@
             var path = paths[iPath];
             
             // either path.pathSegments or path.pathSimpleSegs
-            gCode += path.gCodeForSegs(path.pathSegments, ceiling, cutHeight, pxPerMm); 
+            gCode += path.gCodeForSegs(path.pathSimpleSegs, ceiling, cutHeight, pxPerMm); 
             
             // if (iPath < paths.length -2) {
                 // gCode += this.gCodeJogPoints(ceiling, cutHeight, paths[iPath+1].pathSimpleSegs[0][0], pxPerMm);

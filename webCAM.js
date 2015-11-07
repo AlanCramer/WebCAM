@@ -58,7 +58,8 @@
         // currently have 1 toolpath object, 
     
         var pxPerInTP = parseFloat($("#pxPerInTPCalc").val());
-        var pxPerMm = pxPerInTP/25.4;
+        var pxPerInImg = parseFloat($("#pxPerInImg").val()); 
+        var pxPerMm = pxPerInImg/25.4;
         var gcode = ACTP.gCodePaths(webCAM.toolpaths, pxPerMm);
         
         webCAM.exportToFile(gcode, "gcodeDownload.nc");
@@ -146,16 +147,16 @@
             
             var sz = d3.max([img.width, img.height]);
             
-            canvas.style.width =  (600/sz)*img.width.toString() + "px";
-            canvas.style.height = (600/sz)*img.height.toString() + "px";
+            canvas.style.width =  ((600/sz)*img.width).toString() + "px";
+            canvas.style.height = ((600/sz)*img.height).toString() + "px";
             
             var canv2 = document.getElementById('path-canvas');
-            canv2.width = img.width*scale;
-            canv2.height = img.height*scale;
+            canv2.width = canvas.width;
+            canv2.height = canvas.height;
             canv2.style.width = canvas.style.width;
             canv2.style.height = canvas.style.height;
             
-            ctx.drawImage(webCAM.image, 0, 0, img.width*scale, img.height*scale);
+            ctx.drawImage(webCAM.image, 0, 0, canvas.width, canvas.height);
      
             var imgW = img.width*pxPerIn/pxPerInImg; // converted to display 
             var imgH = img.height*pxPerIn/pxPerInImg;
@@ -185,9 +186,10 @@
         ctx.fillStyle = "#0000FF";
         ctx.strokeStyle = "#0000FF";
         ctx.lineWidth = 3;
-        //this.toolpaths.drawSimpleSegments(canvas);
+        
         this.toolpaths.forEach(function(tp) {
-            tp.draw(canvas);
+            //tp.draw(canvas);
+            tp.drawSimpleSegments(canvas);
         })
     };
     
@@ -236,16 +238,15 @@
     
     webCAM.setupSvg = function() {
 
-        var svgPaddingW = 50;
-        var svgPaddingH = 50;
+        var svgMargin = { top: 50, left: 50, right: 50, bottom:50};
         
         var us = this.getUserScale();
         
-        webCAM.svgW = us.x*us.pxPerIn + svgPaddingW;
-        webCAM.svgH = us.y*us.pxPerIn + svgPaddingH;
+        webCAM.svgW = us.x*us.pxPerIn + svgMargin.left + svgMargin.right;
+        webCAM.svgH = us.y*us.pxPerIn + svgMargin.top + svgMargin.bottom;
         
-        var svgWorkingW = webCAM.svgW-svgPaddingW;
-        var svgWorkingH = webCAM.svgH-svgPaddingH;
+        var svgWorkingW = webCAM.svgW-svgMargin.left-svgMargin.right;
+        var svgWorkingH = webCAM.svgH-svgMargin.top-svgMargin.bottom;
         
         var svg = d3.select("#canvasSvg")
             .style("border", "2px solid #9bb")
@@ -259,11 +260,11 @@
         
         var yScale = d3.scale.linear()
             .domain([0, us.y]) 
-            .range([0, svgWorkingH]);
+            .range([0, -svgWorkingH]);
         
         var xAxis = d3.svg.axis()
             .scale(xScale)
-            .orient("top")
+            .orient("bottom")
             ;
         
         var yAxis = d3.svg.axis()
@@ -276,12 +277,12 @@
         
         svg.append("g")
             .attr("class", "axis")
-             .attr("transform", "translate( " + svgPaddingW  + ", " + svgPaddingH + ")")   // 
+             .attr("transform", "translate( " + svgMargin.left  + ", " + (svgMargin.top+svgWorkingH) + ")")   // 
             .call(xAxis);
             
         svg.append("g")
             .attr("class", "axis")
-            .attr("transform", "translate(" + svgPaddingW +", " + svgPaddingH + ")")
+            .attr("transform", "translate(" + svgMargin.left +", " + (svgMargin.top+svgWorkingH) + ")")
             .call(yAxis);   
     };
     

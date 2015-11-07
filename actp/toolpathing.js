@@ -21,7 +21,7 @@
         var path = new ACTP.Path();
         vectorizeDistanceTrf(dt, toolCtx.toolbitDiamInPx/2, path);
         
-        path.buildSimpleSegs(1);
+        path.buildSimpleSegs(.1);
         //path.buildArcInterp(1);
         
         return path;
