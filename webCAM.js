@@ -74,16 +74,34 @@
         
         var svg = d3.select("#canvasSvg");
         
-        svg.append("rect")
+        var manipG = svg.append("g")
             .attr("class", "manip")
-            .attr("x", this.x.baseVal.value)
-            .attr("y", this.y.baseVal.value) 
+            .attr("transform", "translate(" + this.x.baseVal.value + "," + this.y.baseVal.value +")");
+            
+        manipG.append("rect")
+            .attr("x", 0) //this.x.baseVal.value)
+            .attr("y", 0) // this.y.baseVal.value) 
             .attr("width", this.width.baseVal.value)
             .attr("height", this.height.baseVal.value)
             .style("stroke-width", "1")
             .style("fill", "none")
             .style("stroke", "orange")
             ;
+            
+        manipG.append("circle")
+            .attr("cx", this.width.baseVal.value)
+            .attr("cy", 0) //this.y.baseVal.value)
+            .attr("r", 8)
+            .style("stroke-width", "1")
+            .style("fill", "orange")
+            .on("mouseover", function() { 
+               this.style("fill", "blue"); 
+            })
+            .on("mouseout", function() { 
+               this.style("fill", "orange"); 
+            })
+            ;            
+            
     }
     
     webCAM.eraseBBox = function() {
@@ -110,11 +128,11 @@
             .attr("y", d3.event.y);
           
         // todo only associated manips, of course  
-        d3.select(".manip")
-            .attr("x", d3.event.x)
-            .attr("y", d3.event.y);         
-          
-          
+        var manips = d3.selectAll(".manip");
+        
+        manips
+            .attr("transform", "translate (" + d3.event.x + "," + d3.event.y +")")
+        ;           
     };
     
     // redraws image canvas, probably want to clear path canvas 
@@ -172,8 +190,8 @@
             imgs
                 .attr("width", imgW) 
                 .attr("height", imgH)
-                .on("mouseover", webCAM.drawBBox)
-                .on("mouseout", webCAM.eraseBBox)
+                .on("mouseenter", webCAM.drawBBox)
+                .on("mouseleave", webCAM.eraseBBox)
                 .call(drag);
         }    
     };
