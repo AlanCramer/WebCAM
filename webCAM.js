@@ -92,20 +92,20 @@
                 .style("stroke", "orange")
                 ;
                 
-            manipG.append("circle")
-                .attr("cx", this.width.baseVal.value-10)
-                .attr("cy", 10) //this.y.baseVal.value)
-                .attr("r", 8)
-                .style("stroke-width", "1")
-                .style("fill", "orange")
-                .on("mouseover", function() { 
-                   d3.select(this).style("fill", "blue"); 
-                })
-                .on("mouseout", function() { 
-                   d3.select(this).style("fill", "orange"); 
-                })
-                .call(dragScale)
-                ;            
+            // manipG.append("circle")
+                // .attr("cx", this.width.baseVal.value-10)
+                // .attr("cy", 10) //this.y.baseVal.value)
+                // .attr("r", 8)
+                // .style("stroke-width", "1")
+                // .style("fill", "orange")
+                // .on("mouseover", function() { 
+                   // d3.select(this).style("fill", "blue"); 
+                // })
+                // .on("mouseout", function() { 
+                   // d3.select(this).style("fill", "orange"); 
+                // })
+                // .call(dragScale)
+                // ;            
         }
     }
     
