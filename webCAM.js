@@ -11,6 +11,7 @@
         this.clearPathCanvas();
         this.CalcToolpaths();
         this.DrawPathCanvas();
+        this.DrawPathsSvg();
     };
     
     webCAM.OnScaleChange = function() {
@@ -66,7 +67,7 @@
         
     };
     
-    
+    webCAM.bboxDrawn = false;
     webCAM.drawBBox = function() {
         
         var that = this;
@@ -74,45 +75,64 @@
         
         var svg = d3.select("#canvasSvg");
         
-        var manipG = svg.append("g")
-            .attr("class", "manip")
-            .attr("transform", "translate(" + this.x.baseVal.value + "," + this.y.baseVal.value +")");
+        if (!webCAM.bboxDrawn) {
             
-        manipG.append("rect")
-            .attr("x", 0) //this.x.baseVal.value)
-            .attr("y", 0) // this.y.baseVal.value) 
-            .attr("width", this.width.baseVal.value)
-            .attr("height", this.height.baseVal.value)
-            .style("stroke-width", "1")
-            .style("fill", "none")
-            .style("stroke", "orange")
-            ;
-            
-        manipG.append("circle")
-            .attr("cx", this.width.baseVal.value)
-            .attr("cy", 0) //this.y.baseVal.value)
-            .attr("r", 8)
-            .style("stroke-width", "1")
-            .style("fill", "orange")
-            .on("mouseover", function() { 
-               this.style("fill", "blue"); 
-            })
-            .on("mouseout", function() { 
-               this.style("fill", "orange"); 
-            })
-            ;            
-            
+            webCAM.bboxDrawn = true;
+            var manipG = svg.append("g")
+                .attr("class", "manip")
+                .attr("transform", "translate(" + this.x.baseVal.value + "," + this.y.baseVal.value +")");
+                
+            manipG.append("rect")
+                .attr("x", 0) //this.x.baseVal.value)
+                .attr("y", 0) // this.y.baseVal.value) 
+                .attr("width", this.width.baseVal.value)
+                .attr("height", this.height.baseVal.value)
+                .style("stroke-width", "1")
+                .style("fill", "none")
+                .style("stroke", "orange")
+                ;
+                
+            manipG.append("circle")
+                .attr("cx", this.width.baseVal.value-10)
+                .attr("cy", 10) //this.y.baseVal.value)
+                .attr("r", 8)
+                .style("stroke-width", "1")
+                .style("fill", "orange")
+                .on("mouseover", function() { 
+                   d3.select(this).style("fill", "blue"); 
+                })
+                .on("mouseout", function() { 
+                   d3.select(this).style("fill", "orange"); 
+                })
+                .call(dragScale)
+                ;            
+        }
     }
     
     webCAM.eraseBBox = function() {
         
-        var that = this;
         var imgSel = d3.select(this);
+        var mouse = d3.mouse(this);
         
-        var svg = d3.select("#canvasSvg");
-        
-        svg.selectAll(".manip")
-            .remove();
+        // var imgX = this.x.baseVal.value;
+        // var imgY = this.y.baseVal.value;
+        // var imgW = parseFloat(imgSel.attr("width"));
+        // var imgH = parseFloat(imgSel.attr("height"));
+
+        // var msX = mouse[0];
+        // var msY = mouse[1];
+        // if (!(imgX < msX          && 
+            // msX < imgX + imgW   &&
+            // msY < imgY + imgH   && 
+            // imgY < msY ))
+        // {            
+            var svg = d3.select("#canvasSvg");
+            
+            svg.selectAll(".manip")
+                .remove();
+                
+            webCAM.bboxDrawn = false;
+        //}
     }
     
     var drag = d3.behavior.drag()
@@ -121,6 +141,13 @@
                 return {x: img.attr("x"), y: img.attr("y")}; 
         })
         .on("drag", dragmove);
+        
+    var dragScale = d3.behavior.drag()
+        .origin(function(d) {
+                var img = d3.select(this);
+                return {x: img.attr("x"), y: img.attr("y")}; 
+        })
+        .on("drag", dragscale);
     
     function dragmove(d) {
         d3.select(this)
@@ -133,6 +160,28 @@
         manips
             .attr("transform", "translate (" + d3.event.x + "," + d3.event.y +")")
         ;           
+    };
+        
+    function dragscale(d) {
+        
+        // get the img
+        // d3.select(this)
+            // .attr("x", d3.event.x)
+            // .attr("y", d3.event.y);
+          
+        // todo only associated manips, of course  
+        var img = d3.select("image"); // the manip  group
+        var dist = Math.sqrt(d3.event.x*d3.event.x + d3.event.y*d3.event.y);
+
+        var cW = parseFloat(img.attr("width"));
+        var cH = parseFloat(img.attr("height"));
+
+        console.log(dist);
+        // img.attr("width", cW*dist);
+        // img.attr("height", cH*dist);
+        
+        // webCAM.eraseBBox();
+        // webCAM.drawBBox();
     };
     
     // redraws image canvas, probably want to clear path canvas 
