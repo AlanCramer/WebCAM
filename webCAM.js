@@ -11,6 +11,7 @@
         this.clearPathCanvas();
         this.CalcToolpaths();
         this.DrawPathCanvas();
+        //this.DrawImageCanvas();
         this.DrawPathsSvg();
     };
     
@@ -140,15 +141,10 @@
                 var img = d3.select(this);
                 return {x: img.attr("x"), y: img.attr("y")}; 
         })
+        .on("dragstart", function() {
+            webCAM.clearPathCanvas(); })
         .on("drag", dragmove);
-        
-    var dragScale = d3.behavior.drag()
-        .origin(function(d) {
-                var img = d3.select(this);
-                return {x: img.attr("x"), y: img.attr("y")}; 
-        })
-        .on("drag", dragscale);
-    
+          
     function dragmove(d) {
         d3.select(this)
             .attr("x", d3.event.x)
@@ -245,6 +241,46 @@
         }    
     };
     
+    webCAM.DrawPathsSvg = function() {
+        
+        var tp = this.toolpaths;    
+        
+        var img = d3.select("image"); // only 1 for the moment ...
+        var xoff = +img.attr("x");
+        var yoff = +img.attr("y");
+        
+        var svg = d3.select("#canvasSvg");
+        var svgtp = svg.selectAll(".toolpath")
+            .data(tp[0].pathSimpleSegs[0]);
+
+        // svgtp.enter()
+            // .append("circle")
+            // .attr("class",  "toolpath")
+            // .attr("cx", function(d) { 
+                // return d.x + xoff;
+            // })
+            // .attr("cy", function(d) { 
+                // return d.y + yoff;
+            // })
+            // .attr("r", 1)
+            // .style("fill", "blue")
+        // ;  
+        
+        var polyline = d3.svg.line()
+            .x(function(d) { return d.x + xoff; })
+            .y(function(d) { return d.y + yoff; })
+            ;
+            
+        
+        svg.append("path")
+            .datum(tp[0].pathSimpleSegs[0])
+            .attr("class", "line toolpath")
+            .attr("fill", "none")
+            .attr("stroke", "blue")
+            .attr("d", polyline);
+        
+    };
+    
     webCAM.DrawPathCanvas = function() {
         
         var canvas = document.getElementById('path-canvas');
@@ -289,7 +325,11 @@
         
         var canvas = document.getElementById('path-canvas');
         var ctx = canvas.getContext('2d');  
-        ctx.clearRect(0, 0, canvas.width, canvas.height); // note the diff to image canvas     
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // note the diff to image canvas 
+
+        var svg = d3.select("#canvasSvg");
+        var svgtp = svg.selectAll(".toolpath");
+        svgtp.remove();
     };
     
     webCAM.getUserScale = function() {
