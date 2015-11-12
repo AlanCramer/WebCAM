@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="vendor/d3.min.js"></script>
+
+<script>
+    var myApp = {};
+</script>
+
+<script src="d3widgets/dbFillet.js"></script>
+<script src="exportSvg.js"></script>
+<head>
+</head>
+
+<body>
+
+<a id="link" href="#">Right Click and "Save Link as" to save SVG</a><br>
+
+<script>
+
+    d3.select("#link")
+        .on("click", myApp.prepareSvgExport)
+        .on("contextmenu", myApp.prepareSvgExport);
+
+    var InfoBoxSvgWidth = 300;
+    var InfoBoxSvgHeight = 200;
+    
+    var cLength = 20; // inches
+    var cWidth = 15; // inches
+    var cHeight = 2; // inches
+    
+    var xSpacings = [2,5,10];
+    var ySpacings = [6];
+    
+    var pxPerIn = (InfoBoxSvgWidth)/cLength; 
+
+    var infoBox = d3.select("body").append("div")
+        .attr("class", "infobox")
+        .style("background", "#eee")
+        .style("margin", "20px")
+        .style("padding", "5px");  
+    
+    var leftColumn = infoBox.append("div")
+        .style("float", "left");
+    
+    leftColumn.append("label")
+        .text(pxPerIn.toString() + " pixels per inch.")
+        .style("display", "block")
+        .style("margin-bottom", "20px")
+        ;
+        
+    var spcInpDiv = leftColumn.append("div")
+        .attr("class", "spacerInputs")
+        //.style("margin", "10px")
+        ;
+    
+    spcInpDiv.append("input")
+        .attr("id", "xSpacerInput")
+        .attr("type", "text")
+        .attr("value", xSpacings.toString())
+        .style("display", "block")
+        .style("margin-bottom", "3px")
+        .on("change", handleDataUpdate)
+        ;
+        
+    spcInpDiv.append("input")
+        .attr("id", "ySpacerInput")
+        .attr("type", "text")
+        .attr("value", ySpacings.toString())
+        .style("display", "block")
+        .style("margin-bottom", "3px")
+        .on("change", handleDataUpdate)
+        ;  
+        
+    var InfoBoxSvg = infoBox
+        .append("div")
+        .append("svg")
+        .attr("width", InfoBoxSvgWidth)
+        .attr("height", InfoBoxSvgHeight)
+        .style("border", "10px solid #bfb");
+    
+    InfoBoxSvg.append("rect")
+        .attr("class", "outline")
+        .attr("x", 0)
+        .attr("y", 0)       
+        .attr("width", cLength*pxPerIn)
+        .attr("height", cWidth*pxPerIn)
+        .style("fill", "#bbb");
+    
+    var partsSvgWidth = 2*InfoBoxSvgWidth;
+    var partsSvgHeight = 2*InfoBoxSvgHeight;
+    
+    var partsSvg = d3.select("body")
+        .append("div")
+        .append("svg")
+        .attr("width", partsSvgWidth)
+        .attr("height", partsSvgHeight)
+        .style("border", "1px solid black");
+    
+    updateSpacerData(xSpacings, ySpacings);
+
+    function handleDataUpdate() {
+    
+        // validate data
+        var xspc = document.getElementById("xSpacerInput");
+        
+        var vals = xspc.value.split(",");
+        var newX = [];
+        vals.forEach(function(val) { newX.push(parseFloat(val));});
+        
+        var yspc = document.getElementById("ySpacerInput");
+        
+        var vals = yspc.value.split(",");
+        var newY = [];
+        vals.forEach(function(val) { newY.push(parseFloat(val));});
+        
+        updateSpacerData(newX, newY);
+    }
+
+    function updateVerticalSpacers(xSpacings) {
+            
+        var vertSpc = InfoBoxSvg.selectAll(".vertSpacer")
+            .data(xSpacings);
+            
+        vertSpc.exit().remove();
+
+        vertSpc
+            .enter()
+            .append("line");
+        
+        var tmp = 0
+        vertSpc    
+            .attr("class", "vertSpacer")
+            .attr("x1", function(d) { 
+                tmp += d;
+                return tmp*pxPerIn  ; } )
+            .attr("y1",  0  )
+            .attr("x2", function(d,i) { 
+                tmp = (i===0) ? d : tmp + d;
+                return tmp*pxPerIn ; } )
+            .attr("y2", cWidth*pxPerIn  )
+            .style("stroke", "black");
+    }
+    
+    function updateHorizontalSpacers(ySpacings)  {
+            
+        var hrzSpc = InfoBoxSvg.selectAll(".horizSpacer")
+            .data(ySpacings);
+            
+        hrzSpc.exit().remove();
+
+        hrzSpc
+            .enter()
+            .append("line");
+            
+        hrzSpc    
+            .attr("class", "horizSpacer")
+            .attr("x1", 0 )
+            .attr("y1",  function(d,i) { 
+                tmp = i > 0 ? tmp  + d : d;
+                return tmp*pxPerIn ; }  )
+            .attr("x2", cLength*pxPerIn )
+            .attr("y2",  function(d,i) { 
+                tmp = i > 0 ? tmp + d : d;
+                return tmp*pxPerIn ; }  )
+            .style("stroke", "black");    
+    }
+    
+    
+    function updateDimensionLabels(xSpacings) {
+            var total = 0;
+        xSpacings.forEach(function(d) { total += d; } );
+        
+        var xSpacingFence = xSpacings.concat([cLength - total]);
+        var dimLbls = InfoBoxSvg.selectAll(".dimLabel")
+            .data(xSpacingFence);
+            
+        dimLbls.exit().remove();
+
+        dimLbls
+            .enter()
+            .append("text");
+        
+        tmp = 0;
+        dimLbls    
+            .attr("class", "dimLabel")
+            .attr("x", function(d, i) {
+                var prev = xSpacingFence[i-1];
+                tmp = i > 0 ? tmp + prev : 0;
+                return tmp*pxPerIn + (d)*pxPerIn/2; 
+            })
+            .attr("y", 0.1 * cWidth*pxPerIn  )
+            .attr("text-anchor", "middle")
+            .text(function(d) { return " " + d + " "; })
+            ;
+    }
+    
+    function updateVerticalSpacerParts(xSpacings, ySpacings) {
+        var vertSpcParts = partsSvg.selectAll(".vertSpacerPart")
+            .data(xSpacings);
+        
+        vertSpcParts.exit().remove();
+
+        var rect = vertSpcParts
+            .enter()
+            .append("g")   
+            .attr("transform", function(d, i) { 
+                return  "translate(" + (partsSvgWidth/2 + 10) + "," + i*(cHeight*pxPerIn +10) + ")" ;
+            })
+            .append("g")
+            .append("rect")
+            ;
+           
+        rect   
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("width", cWidth*pxPerIn)
+            .attr("height", cHeight*pxPerIn)
+            .style("fill", "#944"); 
+            
+
+         var fillets = vertSpcParts.selectAll(".dbFillet")
+            .data(ySpacings)
+            ;
+ 
+        fillets.exit().remove();
+
+        var dbFillets = myApp.dbFillet()
+            .width(.25*pxPerIn)
+            .height(cHeight*pxPerIn/2)
+            .radius(.125*pxPerIn);
+            
+        var tmp = 0;
+        fillets    
+            .enter()
+            .append("g")
+            .attr("class", "dbFillet");
+            
+        fillets   
+            .attr("transform", function(d,i) { 
+                tmp = i > 0 ? tmp + d : d;
+                return "translate (" + tmp*pxPerIn + ",0)"; } )
+            .call(dbFillets);
+            ;
+               
+            
+    }
+    
+    function updateHorizontalSpacerParts(xSpacings, ySpacings) {
+        var horzSpcPartsG = partsSvg.selectAll(".horzSpacerPart")
+            .data(ySpacings)
+            ;
+            
+        horzSpcPartsG.exit().remove();
+
+        var hRect = horzSpcPartsG
+            .enter()
+            .append("g")
+            .attr("class", "horzSpacerPart")
+            .attr("transform", function(d,i) {return "translate (0, " + i*(cHeight*pxPerIn+10 ) + ")"; })
+            .append("g")
+            .attr("class", "geom")
+            .append("rect");
+            
+        hRect 
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("width", cLength*pxPerIn)
+            .attr("height", cHeight*pxPerIn)
+            .style("fill", "#449")
+            ;
+ 
+        var fillets = horzSpcPartsG.selectAll(".dbFillet")
+            .data(xSpacings)
+            ;
+ 
+        fillets.exit().remove();
+
+        var dbFillets = myApp.dbFillet()
+            .width(.25*pxPerIn)
+            .height(cHeight*pxPerIn/2)
+            .radius(.125*pxPerIn);
+            
+        var tmp = 0;
+        fillets    
+            .enter()
+            .append("g")
+            .attr("class", "dbFillet");
+            
+        fillets   
+            .attr("transform", function(d,i) { 
+                tmp = i > 0 ? tmp + d : d;
+                return "translate (" + tmp*pxPerIn + ",0)"; } )
+            .call(dbFillets);
+            ;
+            
+    }
+    
+    function updateSpacerData(xSpacings, ySpacings) {
+    
+        updateVerticalSpacers(xSpacings);
+        updateHorizontalSpacers(ySpacings);
+        updateDimensionLabels(xSpacings)
+        updateVerticalSpacerParts(xSpacings, ySpacings);
+        updateHorizontalSpacerParts(xSpacings, ySpacings);
+        
+    };
+
+ 
+</script>
+</body>
+
+
+</html>
