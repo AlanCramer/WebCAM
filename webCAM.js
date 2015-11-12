@@ -251,7 +251,7 @@
         
         var svg = d3.select("#canvasSvg");
         var svgtp = svg.selectAll(".toolpath")
-            .data(tp[0].pathSimpleSegs[0]); 
+            .data(tp[0].pathSimpleSegs); 
         
         var polyline = d3.svg.line()
             .x(function(d) { return d.x; })
@@ -260,14 +260,16 @@
         
         // hack!
         var tpwidth = 1/scale1;
-        svg.append("path")
-            .datum(tp[0].pathSimpleSegs[0])
+        svgtp.enter()
+            .append("path")
+            .datum(function(d) { return d; })
             .attr("class", "line toolpath")
             .attr("transform", "translate(" + xoff + " , " + yoff + ") scale(" + scale + ")")
             .attr("fill", "none")
             .attr("stroke", "blue")
             .attr("stroke-width", tpwidth)
-            .attr("d", polyline);
+            .attr("d", function(d) { 
+                return polyline(d) + "Z";});
         
     };
     
