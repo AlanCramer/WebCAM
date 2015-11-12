@@ -12,6 +12,7 @@
         this.CalcToolpaths();
         this.DrawPathCanvas();
         //this.DrawImageCanvas();
+        this.DrawSvgImage();
         this.DrawPathsSvg();
     };
     
@@ -31,28 +32,16 @@
         //var zdim = parseFloat($("#zAxisScale").val());
         
         var pxPerIn = parseFloat($("#pxPerIn").val());
-
         
         imgCanvas.width = xdim*pxPerIn;
         imgCanvas.height = ydim*pxPerIn;
         
         pathCanvas.width = xdim*pxPerIn;
-        pathCanvas.height = ydim*pxPerIn;    
-        
-        // if (webCAM.image) {
-            // webCAM.image.width = xdim*pxPerIn;
-            // webCAM.image.height = ydim*pxPerIn;   
-        // }
-            
-        
-        // imgCanvas.style.width = "" + xdim*pxPerIn + "px";
-        // imgCanvas.style.height = "" + ydim*pxPerIn+ "px";
-        
-        // pathCanvas.style.width = "" +xdim*pxPerIn+ "px";
-        // pathCanvas.style.height = "" +ydim*pxPerIn+ "px";    
+        pathCanvas.height = ydim*pxPerIn;          
         
         webCAM.clearPathCanvas();
         webCAM.DrawImageCanvas();
+        webCAM.DrawSvgImage();
     };
     
     webCAM.OnExportGCode = function() {
@@ -114,26 +103,13 @@
         
         var imgSel = d3.select(this);
         var mouse = d3.mouse(this);
+                   
+        var svg = d3.select("#canvasSvg");
         
-        // var imgX = this.x.baseVal.value;
-        // var imgY = this.y.baseVal.value;
-        // var imgW = parseFloat(imgSel.attr("width"));
-        // var imgH = parseFloat(imgSel.attr("height"));
-
-        // var msX = mouse[0];
-        // var msY = mouse[1];
-        // if (!(imgX < msX          && 
-            // msX < imgX + imgW   &&
-            // msY < imgY + imgH   && 
-            // imgY < msY ))
-        // {            
-            var svg = d3.select("#canvasSvg");
+        svg.selectAll(".manip")
+            .remove();
             
-            svg.selectAll(".manip")
-                .remove();
-                
-            webCAM.bboxDrawn = false;
-        //}
+        webCAM.bboxDrawn = false;
     }
     
     var drag = d3.behavior.drag()
@@ -141,6 +117,7 @@
                 var img = d3.select(this);
                 return {x: img.attr("x"), y: img.attr("y")}; 
         })
+        .on("dragstart", webCAM.clearPathCanvas)
         .on("dragstart", function() {
             webCAM.clearPathCanvas(); })
         .on("drag", dragmove);
@@ -220,63 +197,76 @@
             canv2.style.height = canvas.style.height;
             
             ctx.drawImage(webCAM.image, 0, 0, canvas.width, canvas.height);
-     
-            var imgW = img.width*pxPerIn/pxPerInImg; // converted to display 
-            var imgH = img.height*pxPerIn/pxPerInImg;
          
-            var svg = d3.select("#canvasSvg");
-            var imgs = svg.selectAll("image").data([img]);
-            
-            imgs
-                .enter()
-                .append("svg:image")
-                .attr("xlink:href", img.src);
-            
-            imgs
-                .attr("width", imgW) 
-                .attr("height", imgH)
-                .on("mouseenter", webCAM.drawBBox)
-                .on("mouseleave", webCAM.eraseBBox)
-                .call(drag);
         }    
+    };
+    
+    webCAM.DrawSvgImage = function() {
+        
+        var img = webCAM.image;
+        if (!img)
+            return;
+        
+        var pxPerInImg = parseFloat($("#pxPerInImg").val()); 
+        var pxPerInTP = parseFloat($("#pxPerInTPCalc").val()); 
+        var pxPerIn = parseFloat($("#pxPerIn").val());
+                    
+        var imgW = img.width*pxPerIn/pxPerInImg; // converted to display 
+        var imgH = img.height*pxPerIn/pxPerInImg;
+        
+        var svg = d3.select("#canvasSvg");
+        var imgs = svg.selectAll("image").data([img]);
+    
+        imgs
+            .enter()
+            .append("svg:image")
+            .attr("xlink:href", img.src);
+
+        imgs
+            .attr("width", imgW) 
+            .attr("height", imgH)
+            .on("mouseenter", webCAM.drawBBox)
+            .on("mouseleave", webCAM.eraseBBox)
+            .call(drag);
     };
     
     webCAM.DrawPathsSvg = function() {
         
         var tp = this.toolpaths;    
+        if (!tp)
+            return;
+               
+        var pxPerInImg = parseFloat($("#pxPerInImg").val()); 
+        var pxPerInTP = parseFloat($("#pxPerInTPCalc").val()); 
+        var pxPerIn = parseFloat($("#pxPerIn").val());
+        var scale1 = pxPerIn/pxPerInTP;
+        var scale2 = pxPerIn/pxPerInImg;
+        var scale = scale1 * scale2;
+        
+        // get the x, y of the img, trf tp by scaled versions
         
         var img = d3.select("image"); // only 1 for the moment ...
-        var xoff = +img.attr("x");
+        var xoff = +img.attr("x") ;
         var yoff = +img.attr("y");
         
         var svg = d3.select("#canvasSvg");
         var svgtp = svg.selectAll(".toolpath")
-            .data(tp[0].pathSimpleSegs[0]);
-
-        // svgtp.enter()
-            // .append("circle")
-            // .attr("class",  "toolpath")
-            // .attr("cx", function(d) { 
-                // return d.x + xoff;
-            // })
-            // .attr("cy", function(d) { 
-                // return d.y + yoff;
-            // })
-            // .attr("r", 1)
-            // .style("fill", "blue")
-        // ;  
+            .data(tp[0].pathSimpleSegs[0]); 
         
         var polyline = d3.svg.line()
-            .x(function(d) { return d.x + xoff; })
-            .y(function(d) { return d.y + yoff; })
+            .x(function(d) { return d.x; })
+            .y(function(d) { return d.y; })
             ;
-            
         
+        // hack!
+        var tpwidth = 1/scale1;
         svg.append("path")
             .datum(tp[0].pathSimpleSegs[0])
             .attr("class", "line toolpath")
+            .attr("transform", "translate(" + xoff + " , " + yoff + ") scale(" + scale + ")")
             .attr("fill", "none")
             .attr("stroke", "blue")
+            .attr("stroke-width", tpwidth)
             .attr("d", polyline);
         
     };
@@ -303,8 +293,13 @@
         
         if (tbd) {
             
-            var ppi = parseFloat($("#pxPerInTPCalc").val());
-            tbd *= ppi;
+            var pxPerInImg = parseFloat($("#pxPerInImg").val()); 
+            var pxPerInTP = parseFloat($("#pxPerInTPCalc").val()); 
+            var pxPerIn = parseFloat($("#pxPerIn").val()); 
+            
+            var scale = pxPerInTP;
+            
+            tbd *= scale;
         }
         
         var toolCtx = { 
@@ -416,6 +411,7 @@
             
             webCAM.image = img;
             webCAM.DrawImageCanvas();
+            webCAM.DrawSvgImage();
         });
         
         fileReadAsDataUrl.readAsDataURL(file); 
