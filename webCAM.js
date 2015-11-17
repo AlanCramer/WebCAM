@@ -16,6 +16,16 @@
         this.DrawPathsSvg();
     };
     
+    webCAM.OnDrawPocket = function() {
+
+        this.clearPathCanvas();
+        this.CalcPocket();
+        this.DrawPathCanvas();
+        //this.DrawImageCanvas();
+        this.DrawSvgImage();
+        this.DrawPathsSvg();
+    };
+    
     webCAM.OnScaleChange = function() {
       
         this.resizeDisplayCanvas();
@@ -57,7 +67,6 @@
         
     };
     
-    webCAM.bboxDrawn = false;
     webCAM.drawBBox = function() {
         
         var that = this;
@@ -158,9 +167,9 @@
     };
     
     // redraws image canvas, probably want to clear path canvas 
+    // only in tp pixel space!
     webCAM.DrawImageCanvas = function() 
     {
-        
         // todo - image resolution vs dimensions
         // display dimension should be not relevant 
         
@@ -174,27 +183,23 @@
             
             var pxPerInImg = parseFloat($("#pxPerInImg").val()); 
             var pxPerInTP = parseFloat($("#pxPerInTPCalc").val()); 
-            var pxPerIn = parseFloat($("#pxPerIn").val()); 
+            //var pxPerIn = parseFloat($("#pxPerIn").val()); 
             
             // how many pixels for the image?
-            var scale = pxPerInTP/pxPerIn;
-            
-            // how many px for the image ? 
-            // pct = (image width)/(svg width) 
-            // pxs = [imgWidth(in px) / pxPerIn] * pxPerInTP
+            var scale = pxPerInTP/pxPerInImg;             
             canvas.width = img.width*scale;
             canvas.height = img.height*scale;
             
             var sz = d3.max([img.width, img.height]);
             
-            canvas.style.width =  ((600/sz)*img.width).toString() + "px";
-            canvas.style.height = ((600/sz)*img.height).toString() + "px";
+            //canvas.style.width =  ((600/sz)*img.width).toString() + "px";
+            //canvas.style.height = ((600/sz)*img.height).toString() + "px";
             
             var canv2 = document.getElementById('path-canvas');
             canv2.width = canvas.width;
             canv2.height = canvas.height;
-            canv2.style.width = canvas.style.width;
-            canv2.style.height = canvas.style.height;
+            //canv2.style.width = canvas.style.width;
+            //canv2.style.height = canvas.style.height;
             
             ctx.drawImage(webCAM.image, 0, 0, canvas.width, canvas.height);
          
@@ -236,12 +241,12 @@
         if (!tp)
             return;
                
-        var pxPerInImg = parseFloat($("#pxPerInImg").val()); 
+        //var pxPerInImg = parseFloat($("#pxPerInImg").val()); 
         var pxPerInTP = parseFloat($("#pxPerInTPCalc").val()); 
         var pxPerIn = parseFloat($("#pxPerIn").val());
-        var scale1 = pxPerIn/pxPerInTP;
-        var scale2 = pxPerIn/pxPerInImg;
-        var scale = scale1 * scale2;
+        //var scale1 = pxPerIn/pxPerInTP;
+        //var scale2 = pxPerIn/pxPerInImg;
+        var scale = pxPerIn/pxPerInTP;
         
         // get the x, y of the img, trf tp by scaled versions
         
@@ -258,8 +263,7 @@
             .y(function(d) { return d.y; })
             ;
         
-        // hack!
-        var tpwidth = 1/scale1;
+        //var tpwidth = 1/scale;
         svgtp.enter()
             .append("path")
             .datum(function(d) { return d; })
@@ -267,7 +271,7 @@
             .attr("transform", "translate(" + xoff + " , " + yoff + ") scale(" + scale + ")")
             .attr("fill", "none")
             .attr("stroke", "blue")
-            .attr("stroke-width", tpwidth)
+            .attr("stroke-width", 2)
             .attr("d", function(d) { 
                 return polyline(d) + "Z";});
         
@@ -286,6 +290,36 @@
             //tp.draw(canvas);
             tp.drawSimpleSegments(canvas);
         })
+    };
+    
+    webCAM.CalcPocket = function() {
+                
+        // get user values
+        var tbd = parseFloat($("#bitdiam").val());
+        
+        if (tbd) {
+            
+            var pxPerInImg = parseFloat($("#pxPerInImg").val()); 
+            var pxPerInTP = parseFloat($("#pxPerInTPCalc").val()); 
+            var pxPerIn = parseFloat($("#pxPerIn").val()); 
+            
+            var scale = pxPerInTP;
+            
+            tbd *= scale;
+        }
+        
+        var toolCtx = { 
+         
+            toolbitDiamInPx: tbd || alert("No Tool bit diam defined"),
+        };
+        
+        var imgCanvas = document.getElementById('image-canvas');
+        
+        // hmm ... plural or not? 
+        var path = ACTP.buildPocketToolpaths(toolCtx, imgCanvas);
+        
+        this.toolpaths.length = 0; // empty the array
+        this.toolpaths.push(path);
     };
     
     webCAM.CalcToolpaths = function() {

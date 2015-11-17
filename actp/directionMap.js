@@ -23,6 +23,12 @@ function DirectionMap() {
             return DirectionEnum.Stop;
             
         var res = this.dirMap[encodedNbrhd];
+        
+        if (res === "corner") {
+            
+            console.log ("corner neighborhood");
+        }
+        
         return res;
     }
     

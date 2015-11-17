@@ -237,7 +237,23 @@
         var dst = new ACTP.AcGrey16Image(this.width, this.height);
         dst.data.set(this.data);
         return dst;
-    }    
+    }   
+
+    ACTP.AcGrey32Image = function(width, height) {
+
+        ACTP.AcGreyImage.call(this, width, height);
+
+        this.databuffer = new ArrayBuffer(width*height*4);
+        this.data = new Uint32Array(this.databuffer);
+    }
+    ACTP.AcGrey32Image.prototype = Object.create(ACTP.AcGreyImage.prototype);
+    ACTP.AcGrey32Image.prototype.constructor = ACTP.AcGreyImage;
+    ACTP.AcGrey32Image.prototype.copy = function () {
+        var dst = new ACTP.AcGrey32Image(this.width, this.height);
+        dst.data.set(this.data);
+        return dst;
+    } 
+    
         
     //private:
         // height is 0 to 255, littleEndian is a bool
@@ -280,4 +296,28 @@
                      255;              // alpha
         }
     }
+    
+    ACTP.AcGrey32Image.prototype.encodeHeight = function(value, littleEndian) {
+        if (littleEndian) {
+        
+        // todo this is a weird hack - dividing by 10
+        // values can be to 256*256 = 65535
+        // dividing by 256 makes many pics black - maybe divide by largest element(and then *256)?
+            if (value >  2550) 
+                value = 2550;
+                
+            return  (255   << 24) |    // alpha
+                    (value/10 << 16) |    // blue
+                    (value/10 <<  8) |    // green
+                    value/10;            // red
+        } 
+        else {
+            return  (value/255 << 24) |    // red
+                    (value/255 << 16) |    // green
+                    (value/255 <<  8) |    // blue
+                     255;              // alpha
+        }
+    }
+    
+    
 })(this.ACTP = this.ACTP || {});
