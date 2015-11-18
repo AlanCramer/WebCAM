@@ -60,7 +60,7 @@
     
         var pxPerInTP = parseFloat($("#pxPerInTPCalc").val());
         var pxPerInImg = parseFloat($("#pxPerInImg").val()); 
-        var pxPerMm = pxPerInImg/25.4;
+        var pxPerMm = pxPerInTP/25.4;
         var gcode = ACTP.gCodePaths(webCAM.toolpaths, pxPerMm);
         
         webCAM.exportToFile(gcode, "gcodeDownload.nc");
@@ -389,7 +389,14 @@
         var svg = d3.select("#canvasSvg")
             .style("border", "2px solid #9bb")
             .attr("width", webCAM.svgW)            
-            .attr("height", webCAM.svgH)            
+            .attr("height", webCAM.svgH)  
+            .call(d3.behavior.zoom().on("zoom", function () {
+                //svg.attr("transform",  " scale(" + d3.event.scale + ")")
+                var ppi = +$("#pxPerIn").val();
+                $("#pxPerIn").val(ppi*d3.event.scale);
+                webCAM.OnScaleChange();
+            }))
+      .append("g")            
         ;
         
         var xScale = d3.scale.linear()
